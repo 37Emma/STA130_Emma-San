@@ -1,0 +1,359 @@
++*In[3]:*+
+[source, ipython3]
+----
+import pandas as pd
+url = "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-05/villagers.csv"
+df = pd.read_csv(url)
+df.isna().sum()
+----
+
+
++*Out[3]:*+
+----row_n           0
+id              1
+name            0
+gender          0
+species         0
+birthday        0
+personality     0
+song           11
+phrase          0
+full_id         0
+url             0
+dtype: int64----
+
+
+
+
+
+
+
+
+
+
++*In[5]:*+
+[source, ipython3]
+----
+df.describe()
+----
+
+
++*Out[5]:*+
+----
+[cols=",",options="header",]
+|===
+| |row_n
+|count |391.000000
+|mean |239.902813
+|std |140.702672
+|min |2.000000
+|25% |117.500000
+|50% |240.000000
+|75% |363.500000
+|max |483.000000
+|===
+----
+
+
++*In[4]:*+
+[source, ipython3]
+----
+df['species'].value_counts() 
+----
+
+
++*Out[4]:*+
+----species
+cat          23
+rabbit       20
+frog         18
+squirrel     18
+duck         17
+dog          16
+cub          16
+pig          15
+bear         15
+mouse        15
+horse        15
+bird         13
+penguin      13
+sheep        13
+elephant     11
+wolf         11
+ostrich      10
+deer         10
+eagle         9
+gorilla       9
+chicken       9
+koala         9
+goat          8
+hamster       8
+kangaroo      8
+monkey        8
+anteater      7
+hippo         7
+tiger         7
+alligator     7
+lion          7
+bull          6
+rhino         6
+cow           4
+octopus       3
+Name: count, dtype: int64----
+
+
++*In[6]:*+
+[source, ipython3]
+----
+df['personality'].value_counts()
+----
+
+
++*Out[6]:*+
+----personality
+lazy      60
+normal    59
+cranky    55
+snooty    55
+jock      55
+peppy     49
+smug      34
+uchi      24
+Name: count, dtype: int64----
+
+
++*In[7]:*+
+[source, ipython3]
+----
+df['gender'].value_counts()
+----
+
+
++*Out[7]:*+
+----gender
+male      204
+female    187
+Name: count, dtype: int64----
+
+
++*In[11]:*+
+[source, ipython3]
+----
+df['hobby'].value_counts()
+----
+
+
++*Out[11]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    KeyError                                  Traceback (most recent call last)
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/indexes/base.py:3790, in Index.get_loc(self, key)
+       3789 try:
+    -> 3790     return self._engine.get_loc(casted_key)
+       3791 except KeyError as err:
+
+
+    File index.pyx:152, in pandas._libs.index.IndexEngine.get_loc()
+
+
+    File index.pyx:181, in pandas._libs.index.IndexEngine.get_loc()
+
+
+    File pandas/_libs/hashtable_class_helper.pxi:7080, in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+
+    File pandas/_libs/hashtable_class_helper.pxi:7088, in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+
+    KeyError: 'hobby'
+
+    
+    The above exception was the direct cause of the following exception:
+
+
+    KeyError                                  Traceback (most recent call last)
+
+    Cell In[11], line 1
+    ----> 1 df['hobby'].value_counts()
+
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/frame.py:3893, in DataFrame.__getitem__(self, key)
+       3891 if self.columns.nlevels > 1:
+       3892     return self._getitem_multilevel(key)
+    -> 3893 indexer = self.columns.get_loc(key)
+       3894 if is_integer(indexer):
+       3895     indexer = [indexer]
+
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/indexes/base.py:3797, in Index.get_loc(self, key)
+       3792     if isinstance(casted_key, slice) or (
+       3793         isinstance(casted_key, abc.Iterable)
+       3794         and any(isinstance(x, slice) for x in casted_key)
+       3795     ):
+       3796         raise InvalidIndexError(key)
+    -> 3797     raise KeyError(key) from err
+       3798 except TypeError:
+       3799     # If we have a listlike key, _check_indexing_error will raise
+       3800     #  InvalidIndexError. Otherwise we fall through and re-raise
+       3801     #  the TypeError.
+       3802     self._check_indexing_error(key)
+
+
+    KeyError: 'hobby'
+
+----
+
+
+
+
+
+
+
+
++*In[12]:*+
+[source, ipython3]
+----
+import pandas as pd
+
+# Example DataFrame
+data = {
+    'customer_id': [1, 2, 3, 4],
+    'purchase_amount': [200, None, 150, None],
+    'purchase_date': ['2024-01-01', None, '2024-01-03', '2024-01-04']
+}
+df = pd.DataFrame(data)
+
+# Drop rows with any missing values
+clean_df = df.dropna()
+
+----
+
+
+
+
++*In[13]:*+
+[source, ipython3]
+----
+import pandas as pd
+
+# Example DataFrame with missing values in 'bonus'
+data = {
+    'employee_id': [1, 2, 3, 4],
+    'name': ['Alice', 'Bob', 'Charlie', 'David'],
+    'department': ['HR', 'IT', 'IT', 'Finance'],
+    'salary': [50000, 60000, 55000, 70000],
+    'bonus': [None, None, 1000, None]
+}
+df = pd.DataFrame(data)
+# Remove the 'bonus' column
+del df['bonus']
+----
+
+
+
+
+
+
++*In[14]:*+
+[source, ipython3]
+----
+import pandas as pd
+
+# Load the dataset
+url = "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-05-05/villagers.csv"
+df = pd.read_csv(url)
+missing_data_before = df.isna().sum()
+df.columns
+df.head()
+del df['saying']
+df_cleaned = df.dropna()
+# Check missing values before cleaning
+missing_data_before = df.isna().sum()
+print("Missing Data Before Cleaning:\n", missing_data_before)
+# Check missing values after cleaning
+missing_data_after = df_cleaned.isna().sum()
+print("Missing Data After Cleaning:\n", missing_data_after)
+
+# Check the shape of the dataset before and after cleaning
+shape_before = df.shape
+shape_after = df_cleaned.shape
+print("Shape Before Cleaning:", shape_before)
+print("Shape After Cleaning:", shape_after)
+
+----
+
+
++*Out[14]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    KeyError                                  Traceback (most recent call last)
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/indexes/base.py:3790, in Index.get_loc(self, key)
+       3789 try:
+    -> 3790     return self._engine.get_loc(casted_key)
+       3791 except KeyError as err:
+
+
+    File index.pyx:152, in pandas._libs.index.IndexEngine.get_loc()
+
+
+    File index.pyx:181, in pandas._libs.index.IndexEngine.get_loc()
+
+
+    File pandas/_libs/hashtable_class_helper.pxi:7080, in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+
+    File pandas/_libs/hashtable_class_helper.pxi:7088, in pandas._libs.hashtable.PyObjectHashTable.get_item()
+
+
+    KeyError: 'saying'
+
+    
+    The above exception was the direct cause of the following exception:
+
+
+    KeyError                                  Traceback (most recent call last)
+
+    Cell In[14], line 9
+          7 df.columns
+          8 df.head()
+    ----> 9 del df['saying']
+         10 df_cleaned = df.dropna()
+         11 # Check missing values before cleaning
+
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/generic.py:4441, in NDFrame.__delitem__(self, key)
+       4436             deleted = True
+       4437 if not deleted:
+       4438     # If the above loop ran and didn't delete anything because
+       4439     # there was no match, this call should raise the appropriate
+       4440     # exception:
+    -> 4441     loc = self.axes[-1].get_loc(key)
+       4442     self._mgr = self._mgr.idelete(loc)
+       4444 # delete from the caches
+
+
+    File /opt/conda/lib/python3.11/site-packages/pandas/core/indexes/base.py:3797, in Index.get_loc(self, key)
+       3792     if isinstance(casted_key, slice) or (
+       3793         isinstance(casted_key, abc.Iterable)
+       3794         and any(isinstance(x, slice) for x in casted_key)
+       3795     ):
+       3796         raise InvalidIndexError(key)
+    -> 3797     raise KeyError(key) from err
+       3798 except TypeError:
+       3799     # If we have a listlike key, _check_indexing_error will raise
+       3800     #  InvalidIndexError. Otherwise we fall through and re-raise
+       3801     #  the TypeError.
+       3802     self._check_indexing_error(key)
+
+
+    KeyError: 'saying'
+
+----
+
+
